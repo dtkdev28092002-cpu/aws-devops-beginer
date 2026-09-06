@@ -3,6 +3,8 @@
 Common Terraform commands for this project.
 
 ```bash
+# Generate ssh key
+ssh-keygen -t rsa -b 4096 -C "dtkdev28092002@gmail.com"
 # Initialize the working directory (downloads providers, sets up backend)
 terraform init
 

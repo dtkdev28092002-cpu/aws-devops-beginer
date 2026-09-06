@@ -1,6 +1,6 @@
 // define the AWS provider and specify the region
 provider "aws" {
-  region = "ap-southeast-1"
+  region = var.region
 }
 
 // define resources
@@ -53,7 +53,7 @@ resource "aws_security_group" "udemy-security-group" {
 
 // Init resources ec2 instance
 resource "aws_instance" "udemy-instance" {
-  ami           = var.image_id
+  ami           = var.amis[var.region]
   instance_type = var.instance_type
   key_name      = aws_key_pair.udemy-key.key_name
   tags = {
