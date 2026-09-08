@@ -10,6 +10,7 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+.terraform.lock.hcl
 
 # SSH key pairs (private/public keys must never be committed)
 **/keypair/
