@@ -1,4 +1,4 @@
-data "cloudinit_config" "cloudinit" {
+data "cloudinit_config" "config" {
   gzip          = false
   base64_encode = false
 
@@ -50,6 +50,9 @@ data "cloudinit_config" "cloudinit" {
   }
 }
 
+
+#====================================
+
 #tfsec:ignore:aws-ec2-enforce-launch-config-http-token-imds
 resource "aws_launch_template" "apptemplate" {
   name = "application"
@@ -63,13 +66,17 @@ resource "aws_launch_template" "apptemplate" {
     resource_type = "instance"
 
     tags = {
-      Name = "FrontendApp"
+      Name  = "FrontendApp"
+      Owner = "Udemy"
     }
   }
 
-  user_data = base64encode(data.cloudinit_config.cloudinit.rendered)
+  user_data = base64encode(data.cloudinit_config.config.rendered)
 }
 
+#====================================
+
+#tfsec:ignore:aws-elb-alb-not-public
 resource "aws_lb" "alb1" {
   name                       = "alb1"
   internal                   = false

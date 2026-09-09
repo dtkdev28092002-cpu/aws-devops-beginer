@@ -8,9 +8,7 @@ resource "aws_key_pair" "key" {
 }
 
 module "network" {
-  source = "./modules/network"
-
-  region             = var.region
+  source             = "./modules/network"
   vpc_name           = var.vpc_name
   vpc_cidr           = var.vpc_cidr
   availability_zones = var.availability_zones
@@ -20,7 +18,6 @@ module "network" {
 
 module "security" {
   source         = "./modules/security"
-  region         = var.region
   vpc_id         = module.network.vpc_id
   workstation_ip = var.workstation_ip
 
@@ -29,7 +26,6 @@ module "security" {
 
 module "bastion" {
   source            = "./modules/bastion"
-  region            = var.region
   ami               = var.bastion_ami
   instance_type     = var.bastion_instance_type
   subnet_id         = module.network.public_subnets[0]
@@ -44,7 +40,6 @@ module "bastion" {
 
 module "storage" {
   source            = "./modules/storage"
-  region            = var.region
   ami               = var.db_ami
   instance_type     = var.db_instance_type
   subnet_id         = module.network.private_subnets[0]
@@ -59,7 +54,6 @@ module "storage" {
 
 module "application" {
   source          = "./modules/application"
-  region          = var.region
   ami             = var.app_ami
   instance_type   = var.app_instance_type
   key_name        = aws_key_pair.key.key_name

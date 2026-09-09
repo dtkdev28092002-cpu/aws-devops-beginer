@@ -1,9 +1,10 @@
-resource "aws_security_group" "bastion_sg" {
+resource "aws_security_group" "bastion" {
   name        = "bastion"
   description = "Security group for bastion and MongoDB instances"
   vpc_id      = var.vpc_id
 
   ingress {
+    description = "Allow SSH port 22 access from the workstation"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -24,6 +25,7 @@ resource "aws_security_group" "alb" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description = "Allow HTTP port 80 access from the internet"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -44,6 +46,7 @@ resource "aws_security_group" "application" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description     = "Allow HTTP port 80 access from the internet"
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
@@ -51,6 +54,7 @@ resource "aws_security_group" "application" {
   }
 
   ingress {
+    description     = "Allow HTTP port 8080 access from the internet"
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
@@ -58,10 +62,27 @@ resource "aws_security_group" "application" {
   }
 
   ingress {
+    description     = "Allow SSH port 22 access from the workstation"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion_sg.id]
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Allow HTTP port 80 access from the bastion"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Allow HTTP port 8080 access from the bastion"
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
   }
 
   egress {
@@ -78,6 +99,7 @@ resource "aws_security_group" "mongodb" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description     = "Allow MongoDB port 27017 access from the application"
     from_port       = 27017
     to_port         = 27017
     protocol        = "tcp"
@@ -85,10 +107,11 @@ resource "aws_security_group" "mongodb" {
   }
 
   ingress {
+    description     = "Allow SSH port 22 access from the workstation"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion_sg.id]
+    security_groups = [aws_security_group.bastion.id]
   }
 
   egress {
