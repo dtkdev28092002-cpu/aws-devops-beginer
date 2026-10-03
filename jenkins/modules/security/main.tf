@@ -24,7 +24,7 @@ resource "aws_security_group" "udemy-security-group-jenkins" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.myIp]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   // Outbound rules for the security group
