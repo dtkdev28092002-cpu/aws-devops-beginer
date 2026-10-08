@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
     bucket         = "khangdt-terraform"
-    key            = "terraform"
+    key            = "jenkins/terraform.tfstate"
     region         = "ap-southeast-1"
-    dynamodb_table = "terraform-state"
+    use_lockfile   = true
   }
 }
 provider "aws" {
